@@ -1,5 +1,6 @@
 click==6.7
 Django==1.10.5
+gunicorn==19.7.1
 hashids==1.2.0
 itsdangerous==0.24
 Jinja2==2.9.4
