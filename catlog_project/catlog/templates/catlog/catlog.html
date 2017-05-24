@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+<meta charset="UTF-8">
+<head>
+  <title>catlog - count stuff</title>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <link href="{% static 'css/catlog.css' %}" rel="stylesheet">
+</head>
+<body>
+  <div id="wrap">
+
+  <!-- Modal "share" dialog -->
+  <div id="share-modal-div" class="share-modal">
+
+    <div class="share-modal-content">
+      <div class="share-modal-header">
+        <span class="share-modal-title">
+          <img class="share-modal-title-logo" src="{% static 'images/logo.png' %}"></a>
+          share your catlog... (catlog #{{ mainDatabaseId}})
+        </span>
+    <span class="share-modal-close">&times;</span>
+  </div>
+    <div class="share-modal-body">
+      <table class="share-modal-data-table">
+        <tr>
+          <!-- TODO: "give my catlog a better name..."? -->
+          <td><b>Shareable link:</b>&nbsp;<a id="shareable-link-a" href="{{ mainDatabaseUrl }}">{{ mainDatabaseUrl }}</a></td>
+          <td class="copy-to-clipboard-button-cell">
+            <!-- Trigger -->
+            <button id="copy-to-clipboard-button" class="btn btn-primary" data-clipboard-target="#shareable-link-a">
+              Copy to clipboard&nbsp;&nbsp;<img src="{% static 'images/Octicons-clippy-white.svg' %}" width="16" alt="Copy to clipboard">
+            </button>
+          </td>
+      </tr>
+      </table>
+    </div>
+    </div>
+
+  </div>
+
+  <div class="page-header" id="catlog-page-header">
+    <a href="#">
+          <img id="main-navbar-logo" src="{% static 'images/logo.png' %}"></a>
+          catlog</a>
+          <span id="tagline-span">
+            databases made fun
+          </span>
+    </div> <!-- page-header -->
+  <div>
+
+    <div id = "table-buttons-div">
+      <div id="table-button-name" type="button" href="" class="btn btn-s table-button">
+        table ID <i>{{ mainDatabaseId }}</i>
+      </div>
+
+      <a id="table-button-new" type="button" href="" class="btn btn-s btn-success table-button">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;new table
+      </a>
+
+      <a id="table-button-download" type="button" href="" download="untitled.csv" class="btn btn-s btn-info table-button">
+        <span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;download table
+      </a>
+
+      <a id="table-button-share" type="button" class="btn btn-s btn-primary table-button">
+        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;share...
+      </a>
+    </div>
+
+    <div id="search-bar">
+      <div id="search-buttons-div">
+        <button id="search-button-clear" type="button" class="btn btn-s btn-success search-button">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+
+        <button id="search-button-plus" type="button" class="btn btn-s btn-success search-button">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+        <button id="search-button-minus" type="button" class="btn btn-s btn-danger search-button">
+          <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+        </button>
+
+      </div>
+
+      <div id="search-text-div">
+        <input id="search-text-input" type="text" placeholder="type something here, then press enter or '+'..."></input>
+      </div>
+    </div>
+
+<!--
+    <div id="controls-area">
+    <a id="search-button-download" type="button" href="" download="untitled.csv" class="btn btn-s btn-info search-button">
+      <span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;download catlog
+    </a>
+
+    <a id="search-button-share" type="button" href="" class="btn btn-s btn-primary search-button">
+      <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;share catlog
+    </a>
+    </div>
+
+  -->
+
+    <div id="settings-area">
+      <span class="settings-pre-text">Rows have</span>
+      <label class="checkbox-inline"><input id="settings-checkbox-count" type="checkbox" value="" checked>count</label>
+      <label class="checkbox-inline"><input id="settings-checkbox-description" type="checkbox" value="">description</label>
+      <span class="settings-pre-text">.</span>
+    </div>
+
+    <div id="catlog-area">
+      <table class="table" id="catlog-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Item Name</th>
+        <th>Number</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>``
+    </tbody>
+  </table>
+    </div>
+  </div><!-- /.container -->
+  <div id="push"></div>
+</div> <!-- wrap -->
+
+  <div id="footer">
+    <div class="container">
+      <div class="row advert-div">
+        <div class="span4"></div>
+        <div class="span4"><img class="center-block" src="{% static 'images/advert3.png' %}" /></div>
+        <div class="span4"></div>
+      </div>
+      <div class="row">
+        <div class="span4"></div>
+        <div class="span4 text-center">
+          <a href="mailto:mikemckay2205@gmail.com">get in touch&nbsp;
+            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a>
+             | &copy; Michael McKay</div>
+        <div class="span4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="http://code.jquery.com/jquery-3.1.0.js"></script>
+
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="{% static 'js/bootstrap-number-input.js' %}" ></script>
+  <script src="{% static 'js/clipboard.js' %}"></script>
+  <script src="{% static 'js/underscore-min.js' %}"></script>
+
+  <script type="text/javascript">
+    var mainDatabaseId = "{{ mainDatabaseId }}";
+    var mainDatabaseUrl = "{{ mainDatabaseUrl }}";
+  </script>
+
+  <script src="{% static 'js/catlog.js' %}"></script>
+</body>
+</html>
