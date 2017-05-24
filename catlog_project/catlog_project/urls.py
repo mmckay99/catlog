@@ -19,5 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^c/', include('catlog.urls')),
-    url(r'^$', include('catlog.urls'))
+    url(r'^$', lambda r: HttpResponseRedirect('catlog/'))
 ]
