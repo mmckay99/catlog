@@ -1,1 +1,1 @@
-web: gunicorn catlog_project.wsgi --log-file -
+web: gunicorn catlog_project.wsgi --pythonpath catlog_project/ --log-file -
