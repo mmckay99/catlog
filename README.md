@@ -1,5 +1,5 @@
 # catlog
-A webapp enabling users to count and search sets things- fun databases.
+A webapp enabling users to count and search sets of things- fun databases.
 
 [Try catlog out!](https://tranquil-peak-49937.herokuapp.com/)
 
