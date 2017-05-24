@@ -21,5 +21,5 @@ from django.http import HttpResponseRedirect
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^c/', include('catlog.urls')),
-    url(r'^$', lambda r: HttpResponseRedirect('catlog/'))
+    url(r'^$', lambda r: HttpResponseRedirect('c/'))
 ]
