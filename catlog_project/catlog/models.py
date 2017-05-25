@@ -8,9 +8,11 @@ class CatlogTableCurrentId(models.Model):
     current_id = models.BigIntegerField()
     site = models.OneToOneField(Site)
 
+class CatlogTable(models.Model):
+    name = models.CharField(max_length = 128, unique = True)
 
 class CatlogRow(models.Model):
-    table = models.CharField(max_length = 128, unique = False)
+    table = models.ForeignKey('CatlogTable', on_delete = models.CASCADE)
     rowId = models.IntegerField(default = 0)
     name = models.CharField(max_length = 128, unique = False)
     count = models.IntegerField(default = 0)

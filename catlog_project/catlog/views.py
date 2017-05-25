@@ -17,76 +17,78 @@ def index(request):
 
 @require_GET
 def all_rows(request, catlog_key):
-    rows = CatlogRow.objects.filter(table__exact = catlog_key).values()
-    return JsonResponse({'rows' : list(rows)})
+    # Get the CatlogTable from the catlog_key.
+    rowTable = None
+    try:
+        rowTable = CatlogTable.objects.get(name = catlog_key)
+        rowsList = list(CatlogRow.objects.filter(table = rowTable).values())
+    except CatlogTable.DoesNotExist:
+        rowsList = []
+
+    return JsonResponse({'rows' : rowsList})
 
 @require_POST
 @transaction.atomic
 def update_rows(request, catlog_key):
     jsonString = request.body
 
-    try:
-        table_event_array = json.loads(jsonString)
+    # Get the CatlogTable from the catlog_key.
+    rowTable, rowTableCreated = CatlogTable.objects.get_or_create(name = catlog_key)
 
-        # For each table event array run the event.
-        for table_event in table_event_array:
-            table_event_type = table_event[u'eventType']
-            row_id = int(table_event[u'rowId'])
-            row_data = table_event[u'rowData']
+    table_event_array = json.loads(jsonString)
 
-            print "EVENT: ", table_event
+    # For each table event array run the event.
+    for table_event in table_event_array:
+        table_event_type = table_event[u'eventType']
+        row_id = int(table_event[u'rowId'])
+        row_data = table_event[u'rowData']
 
-            if table_event_type == u'table_event_type_new':
-                new_row_get_or_create = CatlogRow.objects.get_or_create(
+        if table_event_type == u'table_event_type_new':
+            new_row_get_or_create = CatlogRow.objects.get_or_create(
+                rowId = row_id,
+                table = rowTable
+            )
+
+            new_row = new_row_get_or_create[0]
+
+            new_row.name = row_data[u'name']
+            new_row.count = row_data[u'count']
+            new_row.description = row_data[u'description']
+            new_row.save()
+
+        elif table_event_type == u'table_event_type_edit':
+            new_row_get_or_create = CatlogRow.objects.get_or_create(
+                rowId = row_id,
+                table = rowTable
+            )
+
+            print "editing ", row_id, new_row_get_or_create
+
+            new_row = new_row_get_or_create[0]
+
+            print new_row_get_or_create[1]
+
+            new_row.name = row_data[u'name']
+            new_row.count = row_data[u'count']
+            new_row.description = row_data[u'description']
+            new_row.save()
+
+        elif table_event_type == u'table_event_type_delete':
+            try:
+                row_to_delete = CatlogRow.objects.get(
                     rowId = row_id,
-                    table = catlog_key
+                    table = rowTable
                 )
 
-                new_row = new_row_get_or_create[0]
-
-                new_row.name = row_data[u'name']
-                new_row.count = row_data[u'count']
-                new_row.description = row_data[u'description']
-                new_row.save()
-
-            elif table_event_type == u'table_event_type_edit':
-                new_row_get_or_create = CatlogRow.objects.get_or_create(
-                    rowId = row_id,
-                    table = catlog_key
-                )
-
-                print "editing ", row_id, new_row_get_or_create
-
-                new_row = new_row_get_or_create[0]
-
-                print new_row_get_or_create[1]
-
-                new_row.name = row_data[u'name']
-                new_row.count = row_data[u'count']
-                new_row.description = row_data[u'description']
-                new_row.save()
-
-            elif table_event_type == u'table_event_type_delete':
-                try:
-                    print row_id, " ... ", catlog_key
-                    print CatlogRow.objects.filter(table = catlog_key)
-
-                    row_to_delete = CatlogRow.objects.get(
-                        rowId = row_id,
-                        table = catlog_key
-                    )
-
-                    row_to_delete.delete()
-                except CatlogRow.DoesNotExist:
-                    print "Row does not exist"
-                    return HttpResponse("row does not exist", status=444)
-            else:
-                return HttpResponse("internal server error", 501)
+                row_to_delete.delete()
+            except CatlogRow.DoesNotExist:
+                print "Row does not exist"
+                return HttpResponse("row does not exist", status=444)
+        else:
+            return HttpResponse("internal server error", 501)
 
         return HttpResponse(str(len(table_event_array)) + " table events processed", status=201)
 
-    except ValueError as v:
-        return HttpResponse("ValueError: " + v, status=400)
 
 """
 @require_POST
@@ -129,12 +131,17 @@ def delete_row(request, catlog_key, row_id):
 def view_catlog_page(request, catlog_key):
     context = {
         "mainDatabaseId" : catlog_key,
-        "mainDatabaseUrl" : request.build_absolute_uri()
+        "mainDatabaseUrl" : request.build_absolute_uri(),
+        "indexPageUrl" : reverse('index')
     }
 
     # context.update(csrf(request))
 
     return render(request, 'catlog/catlog.html', context)
+
+# TODO: What if someone uses /v0/ as a custom URL then
+# someone else visits /v-1/ and then clicks "new"?
+# Should we maintain a table of "urls that are in use"?.
 
 def new_catlog_page(request):
     # Create a new catlog_key.
@@ -143,7 +150,8 @@ def new_catlog_page(request):
         current_id_object = CatlogTableCurrentId.objects.all()[0]
     except (CatlogTableCurrentId.DoesNotExist, IndexError) as ex:
         print ex
-        # This is a new database.
+        # This is an entirely new website, where the only row
+        # required in CatlogTableCurrentId does not exist yet.
         current_id_object = CatlogTableCurrentId.objects.create(
             current_id = 0,
             site = Site.objects.get_current()
@@ -170,8 +178,8 @@ def new_catlog_page(request):
 
         # Has this key been used before?
         try:
-            CatlogRow.objects.get(table__exact = new_id_key)
-        except CatlogRow.DoesNotExist:
+            CatlogTable.objects.get(name = new_id_key)
+        except CatlogTable.DoesNotExist:
             key_is_unused = True
 
     # Redirect the user to the view_catlog_page for this key.
