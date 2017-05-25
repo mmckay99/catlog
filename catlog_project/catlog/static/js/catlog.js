@@ -540,8 +540,10 @@ function rowMatchesQuery(thisRowData, queryString) {
   return (lowerCaseRowData.includes(lowerCaseQueryString) ||
           lowerCaseQueryString.includes(lowerCaseRowData));
 }
-
+ 
 // Redraws the HTML table that shows the rowData.
+// TODO: Maybe use styles to only hide the rows that aren't relevant?
+// Would this work?
 function redrawTable(queryString) {
   var drawWholeTable = false;
 
