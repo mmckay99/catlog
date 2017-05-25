@@ -4,3 +4,5 @@ catlog_project/db.sqlite3
 venv
 staticfiles
 .env
+catlog_project/catlog_project/local_settings.py
+catlog_project/mydatabase
