@@ -37,11 +37,15 @@ def update_rows(request, catlog_key):
 
     table_event_array = json.loads(jsonString)
 
+    print table_event_array
+
     # For each table event array run the event.
     for table_event in table_event_array:
         table_event_type = table_event[u'eventType']
         row_id = int(table_event[u'rowId'])
         row_data = table_event[u'rowData']
+
+        print table_event_type, " event ... "
 
         if table_event_type == u'table_event_type_new':
             new_row_get_or_create = CatlogRow.objects.get_or_create(
@@ -85,9 +89,11 @@ def update_rows(request, catlog_key):
                 print "Row does not exist"
                 return HttpResponse("row does not exist", status=444)
         else:
+            print "test"
             return HttpResponse("internal server error", 501)
 
-        return HttpResponse(str(len(table_event_array)) + " table events processed", status=201)
+    print "hey"
+    return HttpResponse(str(len(table_event_array)) + " table events processed", status=201)
 
 
 """

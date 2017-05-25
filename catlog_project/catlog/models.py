@@ -11,6 +11,9 @@ class CatlogTableCurrentId(models.Model):
 class CatlogTable(models.Model):
     name = models.CharField(max_length = 128, unique = True)
 
+    def __unicode__(self):
+        return str(self.name).decode("utf-8")
+
 class CatlogRow(models.Model):
     table = models.ForeignKey('CatlogTable', on_delete = models.CASCADE)
     rowId = models.IntegerField(default = 0)
@@ -19,4 +22,4 @@ class CatlogRow(models.Model):
     description = models.TextField(null = False)
 
     def __unicode__(self):
-        return (u"table " + self.table + u" row " + str(self.rowId).decode("utf-8"))
+        return (u"table " + unicode(self.table) + u" row " + str(self.rowId).decode("utf-8"))

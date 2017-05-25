@@ -122,6 +122,30 @@ Database.prototype = {
     return count;
   },
 
+  generateCsv:function(includeName, includeCount, includeDescription) {
+    var csvData = '';
+
+    for (rowIndex in this.rowData) {
+      thisRowData = this.rowData[rowIndex];
+
+      if (includeName) {
+        csvData += thisRowData["name"];
+      }
+
+      if (includeCount) {
+        csvData += ", " + thisRowData["count"];
+      }
+
+      if (includeDescription) {
+        csvData += ", " + thisRowData["description"];
+      }
+
+      csvData += "\n";
+    }
+
+    return csvData;
+  },
+
   getNextLogicalRowForSelection:function(rowId) {
     var closestIdSoFar = -1;
     var minDifferenceToClosestId = Number.MAX_SAFE_INTEGER;
@@ -169,7 +193,7 @@ tableColumnsCells = {};
 // are removed from the queue as they are POSTed to the
 // server.
 tableEventPostQueue = [];
-var POST_TABLE_EVENT_QUEUE_PERIOD_MS = 10e3;
+var POST_TABLE_EVENT_QUEUE_PERIOD_MS = 5e3;
 
 // Store the elements used for the modal.
 var share_modal = document.getElementById('share-modal-div');
@@ -453,21 +477,24 @@ function searchButtonMinusClicked() {
 }
 
 function searchButtonSettingsClicked() {
-  // Generate the CSV data.
-  csvData = '';
+  var nameShowing = true;
+  var countShowing = (settingsData["count"] || false);
+  var descriptionShowing = (settingsData["description"] || false);
 
-  var rowDataLength = rowData.length;
-  for (var rowIndex = 0; rowIndex < rowDataLength; ++rowIndex) {
-    csvData += rowData[rowIndex].join(", ") + "\n";
-  }
+  // Generate the CSV data.
+  var csvData = currentDatabase.generateCsv(
+    nameShowing,
+    countShowing,
+    descriptionShowing
+  );
 
   // Generate a date to use with the filename.
   var d = new Date();
 
   var month = d.getMonth()+1;
   var day = d.getDate();
-  var dateString = d.getFullYear() + '/' +
-    (month<10 ? '0' : '') + month + '/' +
+  var dateString = d.getFullYear() +
+    (month<10 ? '0' : '') + month +
     (day<10 ? '0' : '') + day;
 
   this.download = 'catlog-' + dateString + '.csv';
