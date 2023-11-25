@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% load staticfiles %}
+{% load static %}
 
 <html>
 <meta charset="UTF-8">
@@ -10,7 +10,7 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <link href="{% static 'css/catlog.css' %}" rel="stylesheet">
+  <link href="{% static 'catlog/css/catlog.css' %}" rel="stylesheet">
 </head>
 <body>
   <div id="wrap">
@@ -21,7 +21,7 @@
     <div class="share-modal-content">
       <div class="share-modal-header">
         <span class="share-modal-title">
-          <img class="share-modal-title-logo" src="{% static 'images/logo.png' %}"></a>
+          <img class="share-modal-title-logo" src="{% static 'catlog/images/logo.png' %}"></a>
           share your catlog... (catlog #{{ mainDatabaseId}})
         </span>
     <span class="share-modal-close">&times;</span>
@@ -34,7 +34,7 @@
           <td class="copy-to-clipboard-button-cell">
             <!-- Trigger -->
             <button id="copy-to-clipboard-button" class="btn btn-primary" data-clipboard-target="#shareable-link-a">
-              Copy to clipboard&nbsp;&nbsp;<img src="{% static 'images/octicon-clippy.png' %}" width="16" alt="Copy to clipboard">
+              Copy to clipboard&nbsp;&nbsp;<img src="{% static 'catlog/images/octicon-clippy.png' %}" width="16" alt="Copy to clipboard">
             </button>
           </td>
       </tr>
@@ -46,7 +46,7 @@
 
   <div class="page-header" id="catlog-page-header">
     <a href="#">
-          <img id="main-navbar-logo" src="{% static 'images/logo.png' %}"></a>
+          <img id="main-navbar-logo" src="{% static 'catlog/images/logo.png' %}"></a>
           catlog</a>
           <span id="tagline-span">
             databases made fun
@@ -135,7 +135,7 @@
       <!--
       <div class="row advert-div">
         <div class="span4"></div>
-        <div class="span4"><img class="center-block" src="{% static 'images/advert3.png' %}" /></div>
+        <div class="span4"><img class="center-block" src="{% static 'catlog/images/advert3.png' %}" /></div>
         <div class="span4"></div>
       </div>
     -->
@@ -155,15 +155,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="{% static 'js/bootstrap-number-input-min.js' %}" ></script>
-  <script src="{% static 'js/clipboard.min.js' %}"></script>
-  <script src="{% static 'js/underscore-min.js' %}"></script>
+  <script src="{% static 'catlog/js/bootstrap-number-input-min.js' %}" ></script>
+  <script src="{% static 'catlog/js/clipboard.min.js' %}"></script>
+  <script src="{% static 'catlog/js/underscore-min.js' %}"></script>
 
   <script type="text/javascript">
     var mainDatabaseId = "{{ mainDatabaseId }}";
     var mainDatabaseUrl = "{{ mainDatabaseUrl }}";
   </script>
 
-  <script src="{% static 'js/catlog.js' %}"></script>
+  <script src="{% static 'catlog/js/catlog.js' %}"></script>
 </body>
 </html>

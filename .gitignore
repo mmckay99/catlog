@@ -6,3 +6,4 @@ staticfiles
 .env
 catlog_project/catlog_project/local_settings.py
 catlog_project/mydatabase
+.DS_Store

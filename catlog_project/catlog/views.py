@@ -37,7 +37,7 @@ def update_rows(request, catlog_key):
 
     table_event_array = json.loads(jsonString)
 
-    print table_event_array
+    print(table_event_array)
 
     # For each table event array run the event.
     for table_event in table_event_array:
@@ -45,7 +45,7 @@ def update_rows(request, catlog_key):
         row_id = int(table_event[u'rowId'])
         row_data = table_event[u'rowData']
 
-        print table_event_type, " event ... "
+        print(table_event_type, " event ... ")
 
         if table_event_type == u'table_event_type_new':
             new_row_get_or_create = CatlogRow.objects.get_or_create(
@@ -66,11 +66,11 @@ def update_rows(request, catlog_key):
                 table = rowTable
             )
 
-            print "editing ", row_id, new_row_get_or_create
+            print("editing ", row_id, new_row_get_or_create)
 
             new_row = new_row_get_or_create[0]
 
-            print new_row_get_or_create[1]
+            print(new_row_get_or_create[1])
 
             new_row.name = row_data[u'name']
             new_row.count = row_data[u'count']
@@ -86,13 +86,13 @@ def update_rows(request, catlog_key):
 
                 row_to_delete.delete()
             except CatlogRow.DoesNotExist:
-                print "Row does not exist"
+                print("Row does not exist")
                 return HttpResponse("row does not exist", status=444)
         else:
-            print "test"
+            print("test")
             return HttpResponse("internal server error", 501)
 
-    print "hey"
+    print("hey")
     return HttpResponse(str(len(table_event_array)) + " table events processed", status=201)
 
 
@@ -155,7 +155,7 @@ def new_catlog_page(request):
     try:
         current_id_object = CatlogTableCurrentId.objects.all()[0]
     except (CatlogTableCurrentId.DoesNotExist, IndexError) as ex:
-        print ex
+        print(ex)
         # This is an entirely new website, where the only row
         # required in CatlogTableCurrentId does not exist yet.
         current_id_object = CatlogTableCurrentId.objects.create(
